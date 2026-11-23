@@ -2,32 +2,32 @@
 
 Version **0.1.0** / Plugin ID: `mebiustos.sunlensflareremover`
 
-太陽に付くレンズフレアを無効化するAnchor Chain用MODです。星状に伸びる光芒やレンズ内の反射像を対象にし、太陽の円盤を表示するマテリアル、照明、夕焼け、海面の反射、月のフレアには変更を加えません。設定ファイルは不要です。
+An Anchor Chain mod for Sea Power that disables the sun's lens flare, including star-shaped rays and lens ghosts. It preserves the sun disc, sky lighting, sunset colors, sea reflections, and the moon's flare. No configuration file is required.
 
-## 導入
+## Installation
 
-1. Anchor Chainと、Anchor Chainが必要とするBepInExプリローダーを導入してください。
-2. ゲームを終了し、`dist/SunLensFlareRemover`フォルダを`Sea Power_Data/StreamingAssets`へコピーしてください。
-3. MODマネージャーでAnchor ChainとSun Lens Flare Removerを有効にし、ゲームを再起動してください。
+1. Install Anchor Chain and its required BepInEx preloader.
+2. Exit Sea Power and copy the `dist/SunLensFlareRemover` folder into `Sea Power_Data/StreamingAssets`.
+3. Enable Anchor Chain and Sun Lens Flare Remover in the mod manager, then restart Sea Power.
 
-無効化する場合はMODマネージャーでチェックを外し、再起動してください。アンインストールする場合はゲーム終了後に配置したフォルダを削除してください。元ゲームのDLLやenvironment.iniの編集は不要です。
+To disable the mod, uncheck it in the mod manager and restart the game. To uninstall it, exit the game and delete the installed mod folder. No changes to the game's DLLs or environment.ini are required.
 
-## ビルド
+## Building
 
-Windowsの.NET SDKを使用します。MOD本体はnetstandard2.1、検証プログラムはnet10.0を対象にします。NuGetパッケージのダウンロードは行いません。
+Use a .NET SDK on Windows. The mod targets netstandard2.1, and the verification program targets net10.0. No NuGet packages are downloaded.
 
-`Directory.Build.local.props.example`を`Directory.Build.local.props`へコピーして、ゲームと実際に使用しているAnchorChain.dllのフォルダを設定してください。パスを引数で渡すこともできます。
+Copy `Directory.Build.local.props.example` to `Directory.Build.local.props` and set the paths to the game and the folder containing the AnchorChain.dll you use. You can also supply these paths as command-line arguments to the build script.
 
 ```powershell
 .\build.ps1 -Test
 ```
 
-出力は`dist/SunLensFlareRemover`です。ビルドスクリプトはゲームへの配置や起動を行いません。
+The output is `dist/SunLensFlareRemover`. The build script does not install the mod or launch the game.
 
-## 実装と検証範囲
+## Implementation and verification
 
-`DynamicSky.updateFlares`にHarmonyのpostfixを適用し、太陽のLight.flareだけをnullにします。ゲームは空の更新時にフレアを再設定するため、更新後の除去を維持します。太陽用のフレアアセット自体と月側の処理は変更しません。ゲームのMOD有効状態を確認してからパッチを適用し、初期化失敗はログへ出してこのMODのパッチを解除します。ログ名はSun Lens Flare Removerです。
+A Harmony postfix on `DynamicSky.updateFlares` sets only the sun's Light.flare to null. The game restores the flare during sky updates, so the postfix removes it after each update. The source flare asset and the moon's flare handling are preserved. Patches are installed only when this mod is enabled in the game's mod manager. Initialization failures are logged and the mod's patches are removed. The log source is Sun Lens Flare Remover.
 
-検証プログラムは、インストール済みゲームの実際のupdateFlaresとビルド済みMODのpostfixのILを読み込み、UnityのLight・カメラ等の境界だけを管理オブジェクトに置き換えて実行します。昼・夜・水中・高高度雲の条件、繰り返し更新、フレアアセットと照明値の保持、除去処理を適用しない場合の復帰を検証します。Harmonyが注入するフィールドとコールバック引数の型の適合も確認します。
+The verification program reads the installed game's actual updateFlares IL and the built mod's postfix IL, then executes them with managed substitutes for Unity and scene boundaries. It checks day, night, underwater, and high-altitude cloud conditions; repeated updates; preservation of flare assets and light values; and restoration of the flare when the removal callback is not applied. It also checks that the field injected by Harmony matches the callback parameter type.
 
-この検証はUnity内でのパッチ適用・描画を実行するものではありません。太陽の見え方や海面の反射を含む実画面の比較は、ゲーム内での確認項目です。
+This verification does not exercise patch installation or rendering inside Unity. Visual comparisons of the sun and sea reflections must be performed in the game.
