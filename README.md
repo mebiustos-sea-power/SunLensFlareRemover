@@ -31,3 +31,7 @@ A Harmony postfix on `DynamicSky.updateFlares` sets only the sun's Light.flare t
 The verification program reads the installed game's actual updateFlares IL and the built mod's postfix IL, then executes them with managed substitutes for Unity and scene boundaries. It checks day, night, underwater, and high-altitude cloud conditions; repeated updates; preservation of flare assets and light values; and restoration of the flare when the removal callback is not applied. It also checks that the field injected by Harmony matches the callback parameter type.
 
 This verification does not exercise patch installation or rendering inside Unity. Visual comparisons of the sun and sea reflections must be performed in the game.
+
+## License
+
+The source code and documentation in this repository are licensed under the [MIT License](LICENSE).

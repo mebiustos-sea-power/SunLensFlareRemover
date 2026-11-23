@@ -64,4 +64,5 @@ New-Item -ItemType Directory -Force -Path $taskPackage | Out-Null
 Copy-Item -LiteralPath $taskBinary -Destination $taskPackage -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'package\_info.ini') -Destination $taskPackage -Force
 Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'README.md') -Destination $taskPackage -Force
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'LICENSE') -Destination $taskPackage -Force
 Write-Output "Package: $taskPackage"
