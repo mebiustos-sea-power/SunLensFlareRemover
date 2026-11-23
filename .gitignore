@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+artifacts/
+dist/
+*.dll
+*.exe
+*.pdb
+*.mdb
+*.log
+*.zip
+Directory.Build.local.props
+docs/agent-memory.md
+.vs/
+.vscode/

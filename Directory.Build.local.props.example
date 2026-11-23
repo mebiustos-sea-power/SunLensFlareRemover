@@ -1,0 +1,6 @@
+<Project>
+  <PropertyGroup>
+    <SeaPowerDir>N:\Games\Steam\steamapps\common\Sea Power</SeaPowerDir>
+    <AnchorChainDir>N:\Games\Steam\steamapps\common\Sea Power\Sea Power_Data\StreamingAssets\BlueChain</AnchorChainDir>
+  </PropertyGroup>
+</Project>
